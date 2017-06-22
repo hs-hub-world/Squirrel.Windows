@@ -60,7 +60,7 @@ namespace SyncReleases
                     return -1;
                 }
 
-                var releaseDirectoryInfo = new DirectoryInfo(releaseDir ?? Path.Combine(".", "Releases"));
+                var releaseDirectoryInfo = new DirectoryInfo(releaseDir ?? Path.Combine(".", UpdateManager.RELEASES_FILE));
                 if (!releaseDirectoryInfo.Exists) releaseDirectoryInfo.Create();
 
                 var githubException = default(Exception);
