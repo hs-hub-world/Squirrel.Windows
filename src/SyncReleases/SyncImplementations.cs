@@ -19,10 +19,10 @@ namespace SyncReleases
 
         public static async Task SyncRemoteReleases(Uri targetUri, DirectoryInfo releasesDir)
         {
-            var releasesUri = Utility.AppendPathToUri(targetUri, "RELEASES");
+            var releasesUri = Utility.AppendPathToUri(targetUri, UpdateManager.RELEASES_FILE);
             var releasesIndex = await retryAsync(3, () => downloadReleasesIndex(releasesUri));
 
-            File.WriteAllText(Path.Combine(releasesDir.FullName, "RELEASES"), releasesIndex);
+            File.WriteAllText(Path.Combine(releasesDir.FullName, UpdateManager.RELEASES_FILE), releasesIndex);
 
             var releasesToDownload = ReleaseEntry.ParseReleaseFile(releasesIndex)
                 .Where(x => !x.IsDelta)
@@ -92,7 +92,7 @@ namespace SyncReleases
                 .AsParallel()
                 .Select(x => ReleaseEntry.GenerateFromFile(x.FullName));
 
-            ReleaseEntry.WriteReleaseFile(entries, Path.Combine(releaseDirectoryInfo.FullName, "RELEASES"));
+            ReleaseEntry.WriteReleaseFile(entries, Path.Combine(releaseDirectoryInfo.FullName, UpdateManager.RELEASES_FILE));
         }
 
         static async Task<string> downloadReleasesIndex(Uri uri)
